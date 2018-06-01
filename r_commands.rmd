@@ -1,0 +1,104 @@
+---
+title: "R Commands Reference"
+output: html_notebook
+---
+
+### File Navigation
+
+getwd()             - List current directory
+setwd("Some_PATH")  - Change directory
+list.files()        - List file in current directory
+rm(list=ls())       - clear data variables
+
+### Loading Tools
+
+library(ggplot2)
+
+
+### Loading Datasets
+
+df <- read.csv('dataset.csv', sep = '\t'))      - sep defines tab or other seperator, default is comma
+df <- read.delim('dataset.tsv')                 - read tab delimited dataset
+rm(df)                                          - remove dataset
+
+
+### Summarizing Data
+
+names(df)               - list series
+str(df)                 - review *str*ucture similar to df.head()
+levels(df$series_name)  - unique, lists out levels if defined
+table(df$series_name)   - similar to df['series'].value_counts()
+by(pf$price, pf$color, summary) - specific summary for a series
+
+### Subsetting Data 
+
+subset(mtcars, mpg >= 30 | hp < 60)[0] - similar to df.query('series == value')
+subset(df, !is.na(gender)))  - remove NA just from specific series
+na.omit(df)   - remove ALL na from df
+
+# by(data, factorlist, function)
+# example obtain variable means separately for
+# each level of byvar in data frame mydata 
+by(mydata, mydata$byvar, [summary sum function(x) mean(x)])
+
+
+### Ordering Data
+
+df\$series <- ordered(df\$series, levels = c('low','middle','high'))
+
+df\$series <- factor(df\$series, levels = c('low','middle','high'), ordered = T)
+
+
+### Plotting Data
+
+Barplot:
+qplot(data = reddit, x = age.range)
+
+Histogram:
+facet_wrap filters histogram data by another variable
+facet_grid generally more useful for two or more variables
+ggplot(aes(x = dob_day), data = pf) +
++   geom_histogram(binwidth = 1) +
++   scale_x_continuous(breaks = 1:31) +
++   facet_wrap(~dob_month)
+
+Facets:
+http://www.cookbook-r.com/Graphs/Facets_(ggplot2)/
+scales="free"       - separate y-axis for each
+
+Frequency Polygon:
+ggplot(aes(x = friend_count, y = ..count../sum(..count..)),
+       data = subset(pf, !is.na(gender))) +
+  geom_freqpoly(aes(color = gender), binwidth=10) +
+  scale_x_continuous(limits = c(0, 1000), breaks = seq(0, 1000, 50)) +
+  xlab('Friend Count') +
+  ylab('Proportion of users with that friend count')
+  
+
+Scaling Data:
+ggplot(aes(x = friend_count), data = pf) + geom_histogram() + scale_x_log10()
+
+Box Plot:
+ggplot(aes(x= www_likes, y=friend_count),  data = subset(pf, !is.na(gender))) + geom_boxplot() + coord_cartesian(ylim = c(0, 500))
+
+### Grid plotting
+
+library(gridExtra)
+grid.arrange(p1, p2, p3, ncol=1)
+
+
+
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
